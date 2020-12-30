@@ -18,6 +18,10 @@ public class ObliqueEquationMoveScript : MonoBehaviour
     private float _a;
     private float _b;
 
+    private float _c;
+
+    private float _h0;
+
     private float _toMoveTime;
 
     private float _vx;
@@ -32,7 +36,7 @@ public class ObliqueEquationMoveScript : MonoBehaviour
     {
         Init();
         CalculateCoff();
-        _originPosition = _moveObject.transform.position;
+        
 
         _timer = 0;
     }
@@ -71,17 +75,25 @@ public class ObliqueEquationMoveScript : MonoBehaviour
         var thelta = Vector3.Angle(dir, new Vector3(1, 0, 0));
         _vz = Mathf.Sin(Mathf.Deg2Rad * thelta) * _moveSpeed;
         _vx = Mathf.Cos(Mathf.Deg2Rad * thelta) * _moveSpeed;
+
+        _originPosition = _moveObject.transform.position;
+        _h0 = _moveObject.transform.position.y;
     }
 
     private void CalculateCoff()
     {
-        _a = -(4 * _height) / (_distance * _distance);
-        _b = 4 * _height / _distance;
+        //_a = -(4 * _height) / (_distance * _distance);
+        //_b = 4 * _height / _distance;
+
+        _a = (2 * _h0 - 4 * _height) / (_distance * _distance);
+        _b = (4 * _height - 3 * _h0) / _distance;
+        _c = _h0;
     }
 
     private float GetHeight(float ds)
     {
-        float y = _a * ds * ds + _b * ds;
+        //float y = _a * ds * ds + _b * ds;
+        float y = _a * ds * ds + _b * ds + _c;
         return y;
     }
 }
