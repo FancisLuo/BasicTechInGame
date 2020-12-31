@@ -70,11 +70,20 @@ public class ObliqueEquationMoveScript : MonoBehaviour
         _moveObject.transform.LookAt(_target.transform.position);
         _toMoveTime = _distance / _moveSpeed;
 
-        var dir = _target.transform.position - _moveObject.transform.position;
-        dir.Normalize();
-        var thelta = Vector3.Angle(dir, new Vector3(1, 0, 0));
-        _vz = Mathf.Sin(Mathf.Deg2Rad * thelta) * _moveSpeed;
-        _vx = Mathf.Cos(Mathf.Deg2Rad * thelta) * _moveSpeed;
+//         这里的速度方向计算有问题
+//         var dir = _target.transform.position - _moveObject.transform.position;
+//         dir.Normalize();
+//         var thelta = Vector3.Angle(dir, new Vector3(1, 0, 0));
+//         _vz = Mathf.Sin(Mathf.Deg2Rad * thelta) * _moveSpeed;
+//         _vx = Mathf.Cos(Mathf.Deg2Rad * thelta) * _moveSpeed;
+        var startOnXZ = new Vector3(_moveObject.transform.position.x, 0, _moveObject.transform.position.z);
+        var endOnXZ   = new Vector3(_target.transform.position.x, 0, _target.transform.position.z);
+        var dirOnXZ = endOnXZ - startOnXZ;
+        dirOnXZ.Normalize();
+        
+        var speed = dirOnXZ * _moveSpeed;
+        _vx = speed.x;
+        _vz = speed.z;
 
         _originPosition = _moveObject.transform.position;
         _h0 = _moveObject.transform.position.y;
